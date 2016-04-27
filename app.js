@@ -70,6 +70,14 @@ app.post('/store', function(req, res) {
             return res.send('Could not find that track.');
           }
           var track = results[0];
+          
+          spotifyApi.getUserPlaylist(process.env.SPOTIFY_PLAYLIST_ID)
+            .then(function (data) {
+              console.log('playlist info:', data.body);
+        }, function (err) {
+          console.log('broken: ', err);
+        });
+          
           spotifyApi.addTracksToPlaylist(process.env.SPOTIFY_USERNAME, process.env.SPOTIFY_PLAYLIST_ID, ['spotify:track:' + track.id])
             .then(function(data) {
               return res.send('Track added: *' + track.name + '* by *' + track.artists[0].name + '*');
